@@ -4,8 +4,6 @@ import java.util.ArrayList;
 
 public class GrafoModel {
 
-
-    // Método que devuelve la matriz de incidencia
     public int[][] calcularMatrizIncidencia(List<Nodo> nodos, List<Arista> aristas, boolean esDirigido) {
         int n = nodos.size();
         int m = aristas.size();
@@ -13,7 +11,7 @@ public class GrafoModel {
 
         for (int j = 0; j < m; j++) {
             Arista a = aristas.get(j);
-            int origen = a.origen.id - 1;   // -1 para usar índices
+            int origen = a.origen.id - 1;
             int destino = a.destino.id - 1;
 
             if (esDirigido) {
@@ -27,12 +25,11 @@ public class GrafoModel {
         return matriz;
     }
 
-    // Fórmula para máximo de aristas
     public int calcularMaximoAristas(int nodos, boolean esDirigido) {
         if (esDirigido) {
-            return nodos * (nodos - 1); // dirigido sin bucles
+            return nodos * (nodos - 1);
         } else {
-            return (nodos * (nodos - 1)) / 2; // no dirigido sin bucles
+            return (nodos * (nodos - 1)) / 2;
         }
     }
 }

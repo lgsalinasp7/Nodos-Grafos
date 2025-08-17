@@ -17,9 +17,6 @@ public class Grafo {
 
     public void agregarArista(Nodo origen, Nodo destino) {
         aristas.add(new Arista(origen, destino));
-        if (!dirigido) {
-            aristas.add(new Arista(destino, origen));
-        }
     }
 
     public void limpiarAristas() {

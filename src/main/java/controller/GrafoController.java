@@ -35,10 +35,21 @@ public class GrafoController {
         int seleccion = JOptionPane.showOptionDialog(panelGrafo, "Selecciona el tipo de grafo",
                 "Tipo de Grafo", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE,
                 null, opciones, opciones[0]);
+        
+        if (seleccion == JOptionPane.CLOSED_OPTION) {
+            return; 
+        }
+        
         grafo.setDirigido(seleccion == 0);
 
         int n = grafo.getNodos().size();
-        int m = Math.max(1, grafo.getAristas().size());
+        int m;
+        
+        if (grafo.isDirigido()) {
+            m = n * (n - 1);
+        } else {
+            m = (n * (n - 1)) / 2;
+        }
 
         String[] columnNames = new String[m];
         for (int j = 0; j < m; j++) {
@@ -56,33 +67,6 @@ public class GrafoController {
         JScrollPane scroll = new JScrollPane(tabla);
 
         JButton btnRelacionar = new JButton("Relacionar");
-        btnRelacionar.addActionListener(e -> {
-            if (tabla.isEditing()) {
-                tabla.getCellEditor().stopCellEditing();
-            }
-            grafo.limpiarAristas();
-
-            for (int j = 0; j < tabla.getColumnCount(); j++) {
-                Nodo origen = null, destino = null;
-                for (int i = 0; i < tabla.getRowCount(); i++) {
-                    int valor = Integer.parseInt(tabla.getValueAt(i, j).toString());
-                    if (grafo.isDirigido()) {
-                        if (valor == -1) origen = grafo.getNodos().get(i);
-                        if (valor == 1) destino = grafo.getNodos().get(i);
-                    } else {
-                        if (valor == 1) {
-                            if (origen == null) origen = grafo.getNodos().get(i);
-                            else destino = grafo.getNodos().get(i);
-                        }
-                    }
-                }
-                if (origen != null && destino != null) {
-                    grafo.agregarArista(origen, destino);
-                }
-            }
-            panelGrafo.repaint();
-        });
-
         JPanel panel = new JPanel(new BorderLayout());
         panel.add(scroll, BorderLayout.CENTER);
         panel.add(btnRelacionar, BorderLayout.SOUTH);
@@ -90,8 +74,73 @@ public class GrafoController {
         JFrame frame = new JFrame("Matriz de Incidencia");
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.add(panel);
-        frame.pack();
+        frame.setSize(800, 500);
         frame.setLocationRelativeTo(panelGrafo);
         frame.setVisible(true);
+
+        btnRelacionar.addActionListener(e -> {
+            try {
+                if (tabla.isEditing()) {
+                    tabla.getCellEditor().stopCellEditing();
+                }
+                
+                grafo.limpiarAristas();
+
+                int aristasCreadas = 0;
+              
+                for (int j = 0; j < tabla.getColumnCount(); j++) {
+                    Nodo origen = null, destino = null;
+                    
+                    for (int i = 0; i < tabla.getRowCount(); i++) {
+                        try {
+                            int valor = Integer.parseInt(tabla.getValueAt(i, j).toString());
+                            if (grafo.isDirigido()) {
+                                if (valor == -1) origen = grafo.getNodos().get(i);
+                                if (valor == 1) destino = grafo.getNodos().get(i);
+                            } else {
+                                if (valor == 1) {
+                                    if (origen == null) origen = grafo.getNodos().get(i);
+                                    else destino = grafo.getNodos().get(i);
+                                }
+                            }
+                        } catch (NumberFormatException ex) {
+                            continue;
+                        }
+                    }
+                    
+                    if (origen != null && destino != null) {
+                        grafo.agregarArista(origen, destino);
+                        aristasCreadas++;
+                    }
+                }
+                
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException ex) {
+                    Thread.currentThread().interrupt();
+                }
+                
+                panelGrafo.repaint();
+                
+                frame.dispose();
+                
+                if (aristasCreadas > 0) {
+                    JOptionPane.showMessageDialog(panelGrafo, 
+                        "Se crearon " + aristasCreadas + " aristas/arcos.", 
+                        "Relaciones Creadas", JOptionPane.INFORMATION_MESSAGE);
+                } else {
+                    JOptionPane.showMessageDialog(panelGrafo, 
+                        "No se crearon aristas. Verifica que hayas configurado valores -1 y 1 correctamente.", 
+                        "Sin Relaciones", JOptionPane.WARNING_MESSAGE);
+                }
+                
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(panelGrafo, 
+                    "Error al procesar la matriz: " + ex.getMessage(), 
+                    "Error", JOptionPane.ERROR_MESSAGE);
+                ex.printStackTrace();
+            }
+        });
     }
 }
+
