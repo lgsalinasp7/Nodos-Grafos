@@ -17,3 +17,7 @@ NO DIRIGIDO: \frac{n(n-1)}{2}
 
 algo asi quiero que me salga , pero que todo este en 0 y yo le agregue los valores 
 
+
+
+
+NOTA: papa si hay algo malo o insesesario quitelo porque de verdad estoy muy confundido con este tema y con java MVC
