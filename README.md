@@ -1,4 +1,4 @@
-Papa hola , papa  vea en este proyecto hay que hacer que en el panel donde se colocan los nodos donde dice grafo interactivo enla parte blanca ingresa por ejemplo 4 nodos pero 
+Papa hola , papa  vea en este proyecto hay que hacer que en el panel donde se colocan los nodos donde dice grafo interactivo enla parte blanca ingresa por ejemplo 4 nodos con un click pero 
 ahi hay que quitar la tabla que esta ahi en la mitad y que cuando se le de en el boton abrir matriz se le va a dar 2 opciones para colocar los nodos dirigidos o no dirigidos (eso para 
 hacer el grafo ) luego se le despliega otra matriz pero ahi estoy muy confundido porque esa es la matriz de incidencia que es N x M   para los no dirigidos arista y para los dirigidos es arco 
 pero lo que pasa ahi es que cuando le presiono en relacionar solo se unen como 2 y lo otro es que no me salen la matriz de incidencia correctamente y yo estuve buscando la logica y se la pusea y aun asi no corria 
